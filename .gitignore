@@ -5,3 +5,5 @@ __pycache__/
 .DS_Store
 *.csv
 credentials/
+Job_Market_Pulse/
+extracted_jobs_test.json
