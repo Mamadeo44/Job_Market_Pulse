@@ -7,3 +7,10 @@ __pycache__/
 credentials/
 Job_Market_Pulse/
 extracted_jobs_test.json
+
+# Airflow
+logs/
+plugins/
+.env.airflow
+airflow.cfg
+airflow.db

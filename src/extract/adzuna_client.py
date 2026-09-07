@@ -15,7 +15,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 ADZUNA_BASE_URL = "https://api.adzuna.com/v1/api/jobs"
-ADZUNA_COUNTRIES = ["ch", "es", "gb"]
+ADZUNA_COUNTRIES = ["ch", "fr", "de", "es", "it", "nl", "at", "be", "gb", "au"]
 SEARCH_TERMS = ["data engineer", "data analyst"]
 RESULTS_PER_PAGE = 50
 
