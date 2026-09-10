@@ -18,6 +18,8 @@ from src.extract.remotive_client import fetch_remote_jobs, filter_data_jobs, DAT
 from src.extract.adzuna_client import fetch_adzuna_jobs
 from src.extract.normalize import normalize_remotive_job, normalize_adzuna_job
 from src.load.upload_to_s3 import upload_json_to_s3
+from src.transform.load_staging import fetch_latest_s3_payload, insert_into_staging
+from src.transform.load_dwh import run as run_dwh_transform
 
 import os
 from dotenv import load_dotenv
@@ -97,4 +99,28 @@ extract_and_load = PythonOperator(
     dag=dag,
 )
 
-[check_remotive_api, check_adzuna_api] >> extract_and_load
+
+
+
+def run_load_staging(**context):
+    payload = fetch_latest_s3_payload()
+    insert_into_staging(payload)
+
+
+def run_load_dwh(**context):
+    run_dwh_transform()
+
+
+load_staging_task = PythonOperator(
+    task_id="load_staging",
+    python_callable=run_load_staging,
+    dag=dag,
+)
+
+load_dwh_task = PythonOperator(
+    task_id="load_dwh",
+    python_callable=run_load_dwh,
+    dag=dag,
+)
+
+[check_remotive_api, check_adzuna_api] >> extract_and_load >> load_staging_task >> load_dwh_task
