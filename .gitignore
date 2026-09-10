@@ -14,3 +14,4 @@ plugins/
 .env.airflow
 airflow.cfg
 airflow.db
+config/
