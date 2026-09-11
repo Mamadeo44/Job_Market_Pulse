@@ -42,7 +42,11 @@ SKILL_KEYWORDS = [
 
 SENIOR_PATTERNS = ["senior", "sr.", "sr ", "lead", "principal", "head of", "staff"]
 JUNIOR_PATTERNS = ["junior", "jr.", "jr ", "entry level", "graduate", "intern"]
-
+COUNTRY_NAMES = {
+    "ch": "Switzerland", "fr": "France", "de": "Germany", "es": "Spain",
+    "it": "Italy", "nl": "Netherlands", "at": "Austria", "be": "Belgium",
+    "gb": "United Kingdom", "au": "Australia",
+}
 
 def get_db_connection():
     return psycopg2.connect(
@@ -97,14 +101,15 @@ def parse_geography(row: dict) -> tuple[str | None, str | None]:
 def get_or_create_country(cur, country_code: str | None) -> int | None:
     if not country_code:
         return None
+    country_name = COUNTRY_NAMES.get(country_code.lower(), country_code.upper())
     cur.execute(
         """
         INSERT INTO dwh.dim_country (country_code, country_name)
         VALUES (%s, %s)
-        ON CONFLICT (country_code) DO UPDATE SET country_code = EXCLUDED.country_code
+        ON CONFLICT (country_code) DO UPDATE SET country_name = EXCLUDED.country_name
         RETURNING country_id
         """,
-        (country_code, country_code)
+        (country_code.upper(), country_name)
     )
     return cur.fetchone()["country_id"]
 

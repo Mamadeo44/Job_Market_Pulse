@@ -30,14 +30,14 @@ ORDER BY nb_offres DESC;
 -- Utile pour une carte ou un graphique empilé par pays
 CREATE OR REPLACE VIEW datamart.mart_geography_demand AS
 SELECT
-    co.country_name,
-    ci.city_name,
+    COALESCE(co.country_name, 'Remote / Not specified')::VARCHAR(100) AS country_name,
+    COALESCE(ci.city_name, 'Not specified')::VARCHAR(200) AS city_name,
     f.source,
     COUNT(*) AS nb_offres
 FROM dwh.fact_job_posting f
 LEFT JOIN dwh.dim_city ci ON f.city_id = ci.city_id
 LEFT JOIN dwh.dim_country co ON ci.country_id = co.country_id
-GROUP BY co.country_name, ci.city_name, f.source
+GROUP BY country_name, city_name, f.source
 ORDER BY nb_offres DESC;
 
 -- Bonus : croisement compétence x séniorité, pour répondre à
