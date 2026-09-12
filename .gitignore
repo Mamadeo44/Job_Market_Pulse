@@ -11,7 +11,6 @@ extracted_jobs_test.json
 # Airflow
 logs/
 plugins/
-.env.airflow
 airflow.cfg
 airflow.db
 config/
