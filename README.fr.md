@@ -21,7 +21,7 @@ Python pour l'extraction et la transformation ; Apache Airflow pour l'orchestrat
 ```
 Remotive API ─┐
               ├─► Extraction Python ─► S3 (raw, partitionné par date)
-Adzuna API ───┘                             │
+Adzuna API ───┘                              │
                                              ▼
                                     Staging PostgreSQL
                                              │
